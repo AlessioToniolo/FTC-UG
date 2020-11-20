@@ -75,6 +75,12 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
         // Initialize custom cancelable SampleMecanumDrive class
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
+        // Initialize custom mechanism base class
+        BaseRobot robot = new BaseRobot();
+
+        // Initialize hardware for custom mechanism base class
+        robot.initialize(hardwareMap);
+
         // Initialize custom mechanism manager class
         //robot.initialize(hardwareMap);
         // TODO: bugs
@@ -204,7 +210,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     // Solo Intake with toggle
                     if (gamepad1.dpad_left && gamepad1.dpad_left != prevValueSoloIntake) {
                         if (!toggleSoloIntake) {
-                            robot.intakeMotor.setPower(-1);
+                            robot.intakeMotor.setPower(1);
                         } else {
                             robot.intakeMotor.setPower(0);
                         }
