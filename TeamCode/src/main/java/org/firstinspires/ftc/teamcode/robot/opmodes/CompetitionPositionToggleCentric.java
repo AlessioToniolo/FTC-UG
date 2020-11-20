@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot.opmodes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,6 +42,8 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
     // The location we want the bot to automatically go to when we press the B button
     Pose2d targetPose = new Pose2d(-10.0, -30.0, Math.toRadians(0.0));
+    // The orientation we want the bot to turn to when we press the X button
+    double targetAngle = Math.toRadians(0);
 
     // Base Robot Fields
     // TODO: bugs
@@ -145,7 +148,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                             )
                     );
 
-                    // Go To Position trajectory
+                    // Go To Position trajectory automation
                     if (gamepad1.b) {
                         // If the B button is pressed on gamepad1, we generate a lineToLinearHeading()
                         // trajectory on the fly and follow it
@@ -156,6 +159,16 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                                 .build();
 
                         drive.followTrajectoryAsync(traj1);
+
+                        currentMode = Mode.AUTOMATIC_CONTROL;
+                    }
+
+                    // Turn To Position automation
+                    if (gamepad1.x) {
+                        // If X is pressed, we turn the bot to the specified angle to reach
+                        // targetAngle (0 degrees, orientation for the goal)
+
+                        drive.turnAsync(Angle.normDelta(targetAngle - poseEstimate.getHeading()));
 
                         currentMode = Mode.AUTOMATIC_CONTROL;
                     }
