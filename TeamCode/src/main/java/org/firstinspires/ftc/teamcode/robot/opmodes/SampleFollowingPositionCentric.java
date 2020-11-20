@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot;
+package org.firstinspires.ftc.teamcode.robot.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -36,8 +36,9 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  * <p>
  * This sample utilizes the SampleMecanumDriveCancelable.java class.
  */
-@TeleOp(group = "robot")
+@TeleOp(group = "Sample")
 public class SampleFollowingPositionCentric extends LinearOpMode {
+
     // Define 2 states, drive control or automatic control
     enum Mode {
         DRIVER_CONTROL,

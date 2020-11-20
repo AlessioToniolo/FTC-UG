@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot;
+package org.firstinspires.ftc.teamcode.robot.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.robot.utility.BaseRobot;
+import org.firstinspires.ftc.teamcode.robot.utility.PoseStorage;
 
 /**
  * If A is pressed, the bot will generate a splineTo() trajectory on the fly and follow it to
@@ -38,7 +40,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     Mode currentMode = Mode.DRIVER_CONTROL;
 
     // The location we want the bot to automatically go to when we press the B button
-    Vector2d targetVector = new Vector2d(-10.0, -30.0);
+    Pose2d targetPose = new Pose2d(-10.0, -30.0, Math.toRadians(0.0));
 
     // Base Robot Fields
     BaseRobot robot   = new BaseRobot();
@@ -78,10 +80,10 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
         // Retrieve our pose from the PoseStorage.currentPose static field
         // See AutoTransferPose.java for further details
-        drive.setPoseEstimate(new Pose2d(-50, -50, Math.toRadians(90)));
+        drive.setPoseEstimate(PoseStorage.currentPose);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Robot Ready");
+        telemetry.addData("Message:", "Robot Ready");
         telemetry.update();
         waitForStart();
 
@@ -94,7 +96,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
             Pose2d poseEstimate = drive.getPoseEstimate();
 
-            // Adjusted Pose Heading for teleop sides (program currently for left side of field if not used)
+            // TODO: NOT IN USE; Adjusted Pose Heading for teleop sides (program currently for left side of field if not used)
             double poseRight = -poseEstimate.getHeading() + 180;
 
             // Create a vector from the gamepad x/y inputs
@@ -115,10 +117,14 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
             // control to the automatic mode
             switch (currentMode) {
                 case DRIVER_CONTROL:
+
+                    // TODO: debugging for speed control
                     telemetry.addData("power", input.getX());
                     telemetry.addData("power", input.getY());
                     telemetry.addData("power", -gamepad1.right_stick_x);
                     telemetry.update();
+
+                    // Driving functionality
                     drive.setWeightedDrivePower(
                             // TODO: add speed control
                             new Pose2d(
@@ -128,13 +134,14 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                             )
                     );
 
+                    // Go To Position trajectory
                     if (gamepad1.b) {
                         // If the B button is pressed on gamepad1, we generate a lineToLinearHeading()
                         // trajectory on the fly and follow it
                         // We switch the state to AUTOMATIC_CONTROL
 
                         Trajectory traj1 = drive.trajectoryBuilder(poseEstimate)
-                                .lineTo(targetVector)
+                                .lineToSplineHeading(targetPose)
                                 .build();
 
                         drive.followTrajectoryAsync(traj1);
@@ -142,8 +149,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         currentMode = Mode.AUTOMATIC_CONTROL;
                     }
 
-                    // Mechanism Control
+                    // TODO: NOT IN USE; Mechanism Control
 
+                    /*
                     // Wobble Arm
                     double armMotorPower = gamepad1.right_trigger - gamepad1.left_trigger;
                     if (armMotorPower > 0.4) {
@@ -208,6 +216,8 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         toggleSurgicalIntake = !toggleSurgicalIntake;
                     }
                     prevValueSurgicalIntake = gamepad1.dpad_down;
+                    */
+
 
                 case AUTOMATIC_CONTROL:
                     // If a is pressed, we break out of the automatic following
