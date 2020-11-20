@@ -43,7 +43,8 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     Pose2d targetPose = new Pose2d(-10.0, -30.0, Math.toRadians(0.0));
 
     // Base Robot Fields
-    BaseRobot robot   = new BaseRobot();
+    // TODO: bugs
+    //BaseRobot robot   = new BaseRobot();
     double clawOffset  = 0.0;
     final double CLAW_SPEED  = 0.02;
     private ElapsedTime runtime = new ElapsedTime();
@@ -72,7 +73,8 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         // Initialize custom mechanism manager class
-        robot.initialize(hardwareMap);
+        //robot.initialize(hardwareMap);
+        // TODO: bugs
 
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
