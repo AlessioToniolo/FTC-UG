@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class BaseRobot {
 
     // Mechanism Motors and Servos
-    public DcMotor wobbleArm = null;
-    public DcMotor testMotor = null;
-    public DcMotor surgicalTubingIntake = null;
-    public DcMotor wheelIntake = null;
-    public Servo rightHand    = null;
-    public Servo leftHand   = null;
+    public DcMotor wobbleMotor = null;
+    public DcMotor shooterMotor = null;
+    public DcMotor intakeMotor = null;
+    public DcMotor indexerMotor = null;
+    public Servo wobbleServo    = null;
+    public Servo hopperServo   = null;
 
     // Constants for Arm and Servo Operation
     public static final double MID_SERVO        =  0.5;
@@ -43,33 +43,39 @@ public class BaseRobot {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        wobbleArm = hwMap.dcMotor.get("wobblearm");
-        testMotor = hwMap.dcMotor.get("testmotor");
-        surgicalTubingIntake = hwMap.dcMotor.get("surgicalTubingIntake");
+        // TODO: uncomment when mechanisms added
+        // Get motors
+        //wobbleMotor = hwMap.dcMotor.get("wobblemotor");
+        //shooterMotor = hwMap.dcMotor.get("shootermotor");
+        intakeMotor = hwMap.dcMotor.get("intakemotor");
+        //indexerMotor = hwMap.dcMotor.get("indexermotor");
 
-        wobbleArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        testMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        surgicalTubingIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftHand = hwMap.servo.get("lefthand");
+        // Get servos
+        //wobbleServo = hwMap.servo.get("wobbleServo");
+        //hopperServo = hwMap.servo.get("hopperServo");
+
+        //wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //indexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void wobbleArmDegSet(double speed, double deg, double timeoutS){
+    public void wobbleMotorDegSet(double speed, double deg, double timeoutS){
         int target;
 
         deg = deg * 2;
-        wobbleArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wobbleArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wobbleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if (Math.abs(speed) > DRIVE_SPEED) {
             speed = DRIVE_SPEED;
         }
 
         target = (int)(deg * COUNTS_PER_DEGREE);
-        wobbleArm.setTargetPosition(target);
-        wobbleArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wobbleMotor.setTargetPosition(target);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         period.reset();
-        wobbleArm.setPower(Math.abs(speed));
+        wobbleMotor.setPower(Math.abs(speed));
     }
 
     public void waitForTick(long periodMs) {

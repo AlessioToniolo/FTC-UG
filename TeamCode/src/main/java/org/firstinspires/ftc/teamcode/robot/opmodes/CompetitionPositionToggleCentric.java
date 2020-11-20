@@ -59,6 +59,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     boolean toggleSurgicalIntake = false;
     boolean prevValueWheelIntake = false;
     boolean toggleWheelIntake = false;
+    // TODO: temporary
+    boolean prevValueSoloIntake = false;
+    boolean toggleSoloIntake = false;
     // Not currently in use
     boolean prevValueSpeedControl = false;
     boolean toggleSpeedControl = false;
@@ -150,6 +153,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
 
                     // TODO: NOT IN USE; Mechanism Control
+                        // TODO: debug different motor/servo names according to base
 
                     /*
                     // Wobble Arm
@@ -193,6 +197,19 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
                     prevValueBothIntake = gamepad1.dpad_left;
 
+                    */
+                    // TODO: temporary; should replace once rest of mechanisms are added
+                    // Solo Intake with toggle
+                    if (gamepad1.dpad_left && gamepad1.dpad_left != prevValueSoloIntake) {
+                        if (!toggleSoloIntake) {
+                            robot.intakeMotor.setPower(-1);
+                        } else {
+                            robot.intakeMotor.setPower(0);
+                        }
+                        toggleSoloIntake = !toggleSoloIntake;
+                    }
+                    prevValueSoloIntake = gamepad1.dpad_left;
+                    /*
                     // Both outake with toggle
                     if (gamepad1.dpad_right && gamepad1.dpad_right != prevValueBothOutake) {
                         if (!toggleBothOutake){
