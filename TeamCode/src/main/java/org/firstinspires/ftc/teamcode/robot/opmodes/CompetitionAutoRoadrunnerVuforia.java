@@ -175,6 +175,13 @@ public class CompetitionAutoRoadrunnerVuforia extends LinearOpMode{
                 .build();
         // TODO: figure out which way robot will finish orientation and field centric wise
 
+        // Run trajectories
+        drive.followTrajectory(traj1);
+        drive.followTrajectory(traj2);
+        drive.followTrajectory(traj3);
+        drive.followTrajectory(traj4);
+        drive.followTrajectory(traj5);
+
         // Transfer the current pose to PoseStorage so we can use it in TeleOp
         PoseStorage.currentPose = drive.getPoseEstimate();
     }
