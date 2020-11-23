@@ -5,12 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-// Our pose storage
 import org.firstinspires.ftc.teamcode.robot.utility.PoseStorage;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 @Autonomous(group = "Sample")
 public class SampleTrajectoryAutonomous extends LinearOpMode {
