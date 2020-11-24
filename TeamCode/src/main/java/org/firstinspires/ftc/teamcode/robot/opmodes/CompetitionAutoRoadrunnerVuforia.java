@@ -162,25 +162,26 @@ public class CompetitionAutoRoadrunnerVuforia extends LinearOpMode{
         // todo: add marker for wobble with async arm turning then marker for servo to open once traj is reached
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
                 .lineToLinearHeading(new Pose2d(-31.5, -27.0, Math.toRadians(90.0)))
-                .build();
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
                 .strafeLeft(5)
-                .build();
-        // todo: add marker for servo capture
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
                 .strafeRight(5)
                 .build();
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .splineTo(new Vector2d(10.0 , -15.0), 0.0)
+        // todo: add marker for servo capture
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+                .splineTo(new Vector2d(10.0, -35.0), 0.0)
                 .build();
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                .lineTo(new Vector2d(10.0, -29.0))
+                .build();
+
         // TODO: figure out which way robot will finish orientation and field centric wise
 
         // Run trajectories
         drive.followTrajectory(traj1);
         drive.followTrajectory(traj2);
         drive.followTrajectory(traj3);
+        drive.turn(Math.toRadians(-140));
+        // todo: add method call for dropping wobble
         drive.followTrajectory(traj4);
-        drive.followTrajectory(traj5);
 
         // Transfer the current pose to PoseStorage so we can use it in TeleOp
         PoseStorage.currentPose = drive.getPoseEstimate();
@@ -189,13 +190,59 @@ public class CompetitionAutoRoadrunnerVuforia extends LinearOpMode{
     public void goToB() {
         // TODO: finish paths and add mechanism functionality
 
+        // todo: add shooting
+        Trajectory traj1 = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(35.0, -60.0, Math.toRadians(0.0)))
+                .strafeRight(5.0)
+                .build();
+        // todo: add marker for wobble with async arm turning then marker for servo to open once traj is reached
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(-31.5, -27.0, Math.toRadians(90.0)))
+                .strafeLeft(5)
+                .strafeRight(5)
+                .build();
+        Trajectory traj3 = drive.trajectoryBuilder(traj1.end())
+                .splineTo(new Vector2d(20.0, -20.045), 0.0)
+                .build();
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                .lineTo(new Vector2d(12.0, -12.0))
+                .build();
+
+
+        drive.followTrajectory(traj1);
+        drive.followTrajectory(traj2);
+        drive.followTrajectory(traj3);
+        drive.turn(Math.toRadians(-120));
+        drive.followTrajectory(traj4);
+
         // Transfer the current pose to PoseStorage so we can use it in TeleOp
         PoseStorage.currentPose = drive.getPoseEstimate();
     }
     // Autonomous sequence for target c
     public void goToC() {
-        // TODO: finish paths and add mechanism functionality
+        // TODO: SAME TODOS AS PREVIOUS TARGETS
+        Trajectory traj1 = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(48.0, -58.0, Math.toRadians(-90.0)))
+                .lineTo(new Vector2d(40.8, -58.0))
+                .build();
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .lineToLinearHeading(new Pose2d(-31.5, -27.0, Math.toRadians(90.0)))
+                .strafeLeft(5)
+                .strafeRight(5)
+                .build();
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+                .splineTo(new Vector2d(53.0, -38.0), 0.0)
+                .strafeRight(5.0)
+                .build();
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+                .lineTo(new Vector2d(10.0, -20.0))
+                .build();
 
+        drive.followTrajectory(traj1);
+        drive.followTrajectory(traj2);
+        drive.followTrajectory(traj3);
+        drive.turn(Math.toRadians(-135.0));
+        drive.followTrajectory(traj4);
         // Transfer the current pose to PoseStorage so we can use it in TeleOp
         PoseStorage.currentPose = drive.getPoseEstimate();
     }

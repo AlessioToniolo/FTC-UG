@@ -3,37 +3,34 @@ package org.firstinspires.ftc.teamcode.robot.opmodes;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.robot.utility.PoseStorage;
 
-
-@Autonomous(group = "Sample")
-public class SampleTrajectoryAutonomous extends LinearOpMode {
+public class SamplePathAutonomous extends LinearOpMode {
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         // Our drive base
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         // We want to start the bot at the bottom right red line
-        Pose2d startPose = new Pose2d(-49.0, -49.0, Math.toRadians(0.0));
+        Pose2d startPose = new Pose2d(-63.0, -50.0, Math.toRadians(180.0));
         drive.setPoseEstimate(startPose);
 
         waitForStart();
-
         if (isStopRequested()) return;
 
+        // Our trajectories
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .strafeTo(new Vector2d(-48.00, -20.0))
-                .splineToSplineHeading(new Pose2d(15.0, 3.0, Math.toRadians(75.0)), 4.0)
+                .lineToLinearHeading(new Pose2d(10.0, -48.0, Math.toRadians(-90.0)))
+                .build();
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .splineTo(new Vector2d(-40.0, -10.0), 2.5)
                 .build();
 
+        // Run trajectories
         drive.followTrajectory(traj1);
-
-        // Transfer the current pose to PoseStorage so we can use it in TeleOp
-        PoseStorage.currentPose = drive.getPoseEstimate();
+        drive.followTrajectory(traj2);
     }
 }
