@@ -17,7 +17,7 @@ public class SamplePathAutonomous extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         // We want to start the bot at the bottom right red line
-        Pose2d startPose = new Pose2d(-63.0, -50.0, Math.toRadians(180.0));
+        Pose2d startPose = new Pose2d(-63.0, -50.0, Math.toRadians(0.0));
         drive.setPoseEstimate(startPose);
 
         waitForStart();
