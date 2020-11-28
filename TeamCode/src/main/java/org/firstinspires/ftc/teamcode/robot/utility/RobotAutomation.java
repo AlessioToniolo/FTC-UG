@@ -16,22 +16,19 @@ public class RobotAutomation {
     public RobotAutomation() {}
 
     // Does hopper servo movement
-    private void hopperFlick() {
+    public void hopperFlick() {
         // TODO: APPLY TODOS FOR SERVOS FROM singleShoot()
         robot.hopperServo.setPosition(1);
-        robot.hopperServo.setPosition(0);
+        robot.hopperServo.setPosition(0.5);
     }
 
     // Shoots a single ring from hopper
-    // TODO: not in use due to unfinished robot
     public void singleShoot(double duration) {
         // TODO: check if power is negative or positive for shooter
         robot.shooterMotor.setPower(-1);
         delay(duration);
         // TODO: tune servo position
-        robot.hopperServo.setPosition(1);
-        robot.shooterMotor.setPower(0);
-        robot.hopperServo.setPosition(0);
+        hopperFlick();
     }
 
     // Shoots all rings from hopper

@@ -46,13 +46,13 @@ public class BaseRobot {
         // TODO: uncomment when mechanisms added
         // Get motors
         //wobbleMotor = hwMap.dcMotor.get("wobblemotor");
-        //shooterMotor = hwMap.dcMotor.get("shootermotor");
+        shooterMotor = hwMap.dcMotor.get("shootermotor");
         intakeMotor = hwMap.dcMotor.get("intakemotor");
         //indexerMotor = hwMap.dcMotor.get("indexermotor");
 
         // Get servos
         //wobbleServo = hwMap.servo.get("wobbleServo");
-        //hopperServo = hwMap.servo.get("hopperServo");
+        hopperServo = hwMap.servo.get("hopperservo");
 
         //wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

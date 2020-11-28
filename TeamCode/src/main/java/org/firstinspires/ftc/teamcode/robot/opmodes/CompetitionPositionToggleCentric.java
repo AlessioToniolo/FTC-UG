@@ -7,11 +7,13 @@ import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.robot.utility.BaseRobot;
 import org.firstinspires.ftc.teamcode.robot.utility.PoseStorage;
+import org.firstinspires.ftc.teamcode.robot.utility.RobotAutomation;
 
 /**
  * If A is pressed, the bot will generate a splineTo() trajectory on the fly and follow it to
@@ -52,6 +54,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     final double CLAW_SPEED  = 0.02;
     private ElapsedTime runtime = new ElapsedTime();
 
+    // Rotated Vector Field
+    double poseRight = 0;
+
     // Toggle Fields
     boolean prevValueShooter = false;
     boolean toggleShooter = false;
@@ -73,6 +78,10 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     // Speed Cap State Machine
     boolean speedCapOn = false;
 
+    // Kicker Servo Fields
+    int servoCount = 0;
+    boolean isKicking = false;
+
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize custom cancelable SampleMecanumDrive class
@@ -81,12 +90,14 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
         // Initialize custom mechanism base class
         BaseRobot robot = new BaseRobot();
 
+        // Initialize custom automation class
+        //RobotAutomation auto = new RobotAutomation();
+
         // Initialize hardware for custom mechanism base class
         robot.initialize(hardwareMap);
 
-        // Initialize custom mechanism manager class
-        //robot.initialize(hardwareMap);
-        // TODO: bugs
+        // Initialize hardware for automation class
+        //auto.initializeAutomation();
 
         // We want to turn off velocity control for teleop
         // Velocity control per wheel is not necessary outside of motion profiled auto
@@ -110,8 +121,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
             Pose2d poseEstimate = drive.getPoseEstimate();
 
-            // TODO: NOT IN USE; Adjusted Pose Heading for teleop sides (program currently for left side of field if not used)
-            double poseRight = -poseEstimate.getHeading() + 180;
+            // Adjusted Pose Heading for teleop sides (program currently for left side of field if not used)
+            // TODO: figure out pose heading needed with auto and in general
+            poseRight = -poseEstimate.getHeading() + 180;
 
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
@@ -120,7 +132,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
             Vector2d input = new Vector2d(
                     -gamepad1.left_stick_y,
                     -gamepad1.left_stick_x
-            ).rotated(-poseEstimate.getHeading());
+            ).rotated(poseRight);
 
             // Print pose to telemetry
             telemetry.addData("x", poseEstimate.getX());
@@ -174,8 +186,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
 
                     // TODO: NOT IN USE; Mechanism Control
-                        // TODO: debug different motor/servo names according to base
-
+                    // TODO: debug different motor/servo names according to base
                     /*
                     // Wobble Arm
                     double armMotorPower = gamepad1.right_trigger - gamepad1.left_trigger;
@@ -192,19 +203,20 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     } else if (gamepad1.left_bumper) {
                         robot.leftHand.setPosition(0.2);
                     }
-
+                    */
                     // Shooter with toggle
+                    // TODO: debug if power is reversed
                     if (gamepad1.dpad_up && gamepad1.dpad_up != prevValueShooter) {
                         if (!toggleShooter){
                             // If inaccurate -0.77 is golden power, second power is -0.7785
-                            robot.testMotor.setPower(-1);
+                            robot.shooterMotor.setPower(-1);
                         } else {
-                            robot.testMotor.setPower(0);
+                            robot.shooterMotor.setPower(0);
                         }
                         toggleShooter = !toggleShooter;
                     }
                     prevValueShooter = gamepad1.dpad_up;
-
+                    /*
                     // Both intake with toggle
                     if (gamepad1.dpad_left && gamepad1.dpad_left != prevValueBothIntake) {
                         if (!toggleBothIntake){
@@ -230,6 +242,27 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         toggleSoloIntake = !toggleSoloIntake;
                     }
                     prevValueSoloIntake = gamepad1.dpad_left;
+
+                    // Hooper servo
+                    // User input for kicker servo
+                    if (gamepad1.a) {
+                        isKicking = true;
+                    }
+                    // Controls state of isKicking based on servoCount
+                    if (isKicking) {
+                        servoCount += 1;
+                    }
+                    if (servoCount > 100) {
+                        isKicking = false;
+                        servoCount = 0;
+                    }
+                    // Kicking
+                    if (isKicking) {
+                        robot.hopperServo.setPosition(0.5);
+                    }
+                    else {
+                        robot.hopperServo.setPosition((1.0));
+                    }
                     /*
                     // Both outake with toggle
                     if (gamepad1.dpad_right && gamepad1.dpad_right != prevValueBothOutake) {
