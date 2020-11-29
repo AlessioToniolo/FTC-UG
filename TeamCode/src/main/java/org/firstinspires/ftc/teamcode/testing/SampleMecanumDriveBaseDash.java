@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -18,7 +19,11 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  * @version 1.0
  * @since   2014-03-31
  */
-public class SampleMecanumDriveBase {
+@Config
+public class SampleMecanumDriveBaseDash {
+
+    // FTC Dashboard
+    FtcDashboard dashboard;
 
     // Wheel attribute
     private final String wheel;
@@ -79,36 +84,36 @@ public class SampleMecanumDriveBase {
      * @param motorGearbox The gear ratio of the gearbox on your drive motors simplified ex: 20 (which would be 20:1)
      * <h2>NOTE THIS CLASS ASSUMES YOU HAVE A 1:1 GEAR RATIO FOR DRIVING</h2>
      */
-    public SampleMecanumDriveBase(String wheel, String motor, double motorGearbox, double gearRatio, double forwardDistance, double lateralDistance) {
-         this.wheel = wheel;
-         this.motor = motor;
-         this.gearRatio = gearRatio;
-         this.diagonalDistance = Math.sqrt((forwardDistance * forwardDistance) + (lateralDistance + lateralDistance));
+    public SampleMecanumDriveBaseDash(String wheel, String motor, double motorGearbox, double gearRatio, double forwardDistance, double lateralDistance) {
+        this.wheel = wheel;
+        this.motor = motor;
+        this.gearRatio = gearRatio;
+        this.diagonalDistance = Math.sqrt((forwardDistance * forwardDistance) + (lateralDistance + lateralDistance));
 
-         if (wheel.equals("rev")) {
-             wheelDiameter = 2.95275591;
-         } else if (wheel.equals("tetrix")) {
-             wheelDiameter = 3.858268;
-         } else {
-             // Default if incorrect argument passed
-             wheelDiameter = 3;
-         }
+        if (wheel.equals("rev")) {
+            wheelDiameter = 2.95275591;
+        } else if (wheel.equals("tetrix")) {
+            wheelDiameter = 3.858268;
+        } else {
+            // Default if incorrect argument passed
+            wheelDiameter = 3;
+        }
 
-         if (motor.equals("hdhex")) {
-             if (motorGearbox == 20) {
-                 countsPerMotorRev = 560;
-             } else if (motorGearbox == 40) {
-                 countsPerMotorRev = 1120;
-             } else {
-                 // Default if incorrect argument passed
-                 countsPerMotorRev = 1000;
-             }
-         } else if (motor.equals("torquenado")) {
-             countsPerMotorRev = 1440;
-         } else {
-             // Default if incorrect argument passed
-             countsPerMotorRev = 1440;
-         }
+        if (motor.equals("hdhex")) {
+            if (motorGearbox == 20) {
+                countsPerMotorRev = 560;
+            } else if (motorGearbox == 40) {
+                countsPerMotorRev = 1120;
+            } else {
+                // Default if incorrect argument passed
+                countsPerMotorRev = 1000;
+            }
+        } else if (motor.equals("torquenado")) {
+            countsPerMotorRev = 1440;
+        } else {
+            // Default if incorrect argument passed
+            countsPerMotorRev = 1440;
+        }
     }
 
     // Hardware map
@@ -154,6 +159,9 @@ public class SampleMecanumDriveBase {
             lr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+
+        // Dashboard initialization
+        dashboard = FtcDashboard.getInstance();
     }
 
     /** forward
