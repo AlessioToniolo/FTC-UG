@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.backup;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Autonomous(group = "Backup")
 public class BackupMecanumAutonomousFull extends LinearOpMode {
 
     // Motor fields for global use
