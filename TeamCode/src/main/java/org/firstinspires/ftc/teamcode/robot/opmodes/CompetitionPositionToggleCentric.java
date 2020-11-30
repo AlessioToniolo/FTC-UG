@@ -261,7 +261,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         robot.hopperServo.setPosition(0.5);
                     }
                     else {
-                        robot.hopperServo.setPosition((1.0));
+                        robot.hopperServo.setPosition((0.8));
                     }
                     /*
                     // Both outake with toggle
