@@ -10,8 +10,8 @@ public class BaseRobot {
     // Mechanism Motors and Servos
     public DcMotor wobbleMotor = null;
     public DcMotor shooterMotor = null;
-    public DcMotor intakeMotor = null;
-    public DcMotor indexerMotor = null;
+    public DcMotor clawMotor = null;
+    public Servo clawServo = null;
     public Servo wobbleServo    = null;
     public Servo hopperServo   = null;
 
@@ -21,12 +21,14 @@ public class BaseRobot {
     public static final double ARM_DOWN_POWER   = -0.45;
 
     // For Encoder Functions
-    private double     COUNTS_PER_MOTOR_REV          = 1440 ;    // eg: TETRIX Motor Encoder
+    private double     COUNTS_PER_MOTOR_REV          = 1440;// eg: TETRIX Motor Encoder
+    private double COUNTS_PER_MOTOR_REV_COREHEX = 288;
     private final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     private double     WHEEL_DIAMETER_INCHES         = 2.95275591 ;     // For figuring circumference
     private double     COUNTS_PER_INCH               = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
     private double COUNTS_PER_DEGREE                 = COUNTS_PER_MOTOR_REV / 360;
+    private double COUNTS_PER_DEGREE_COREHEX = COUNTS_PER_MOTOR_REV_COREHEX / 360;
     private double     DRIVE_SPEED                   = 1.0;
     private double     TURN_SPEED                    = 1.0;
 
@@ -43,21 +45,19 @@ public class BaseRobot {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        // TODO: uncomment when mechanisms added
         // Get motors
-        //wobbleMotor = hwMap.dcMotor.get("wobblemotor");
         shooterMotor = hwMap.dcMotor.get("shootermotor");
-        intakeMotor = hwMap.dcMotor.get("intakemotor");
-        //indexerMotor = hwMap.dcMotor.get("indexermotor");
+        clawMotor = hwMap.dcMotor.get("clawmotor");
+        clawMotor = hwMap.dcMotor.get("wobblemotor");
 
         // Get servos
-        //wobbleServo = hwMap.servo.get("wobbleServo");
+        wobbleServo = hwMap.servo.get("wobbleservo");
         hopperServo = hwMap.servo.get("hopperservo");
+        clawServo = hwMap.servo.get("clawservo");
 
-        //wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //indexerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        clawMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void wobbleMotorDegSet(double speed, double deg, double timeoutS){
@@ -76,6 +76,24 @@ public class BaseRobot {
         wobbleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         period.reset();
         wobbleMotor.setPower(Math.abs(speed));
+    }
+
+    public void clawMotorDegSet(double speed, double deg, double timeoutS){
+        int target;
+
+        deg = deg * 2;
+        clawMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        clawMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        if (Math.abs(speed) > DRIVE_SPEED) {
+            speed = DRIVE_SPEED;
+        }
+
+        target = (int)(deg * COUNTS_PER_DEGREE_COREHEX);
+        clawMotor.setTargetPosition(target);
+        clawMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        period.reset();
+        clawMotor.setPower(Math.abs(speed));
     }
 
     public void waitForTick(long periodMs) {
