@@ -82,23 +82,19 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     int servoCount = 0;
     boolean isKicking = false;
 
-    // Claw fields
-    boolean isClawing = false;
-    int clawCount = 0;
-
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize custom cancelable SampleMecanumDrive class
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         // Initialize custom mechanism base class
-        //BaseRobot robot = new BaseRobot();
+        BaseRobot robot = new BaseRobot();
 
         // Initialize custom automation class
         //RobotAutomation auto = new RobotAutomation();
 
         // Initialize hardware for custom mechanism base class
-        //robot.initialize(hardwareMap);
+        robot.initialize(hardwareMap);
 
         // Initialize hardware for automation class
         //auto.initializeAutomation();
@@ -191,24 +187,23 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
                     // TODO: NOT IN USE; Mechanism Control
                     // TODO: debug different motor/servo names according to base
-
-                    // Wobble Arm
                     /*
+                    // Wobble Arm
                     double armMotorPower = gamepad1.right_trigger - gamepad1.left_trigger;
                     if (armMotorPower > 0.4) {
                         armMotorPower = 0.4;
                     } else if (armMotorPower < -0.4) {
                         armMotorPower = -0.4;
                     }
-                    robot.wobbleMotor.setPower(armMotorPower);
+                    robot.wobbleArm.setPower(armMotorPower);
 
                     // Wobble Servo
                     if (gamepad1.right_bumper) {
-                        robot.wobbleServo.setPosition(1.0);
+                        robot.leftHand.setPosition(1.0);
                     } else if (gamepad1.left_bumper) {
-                        robot.wobbleServo.setPosition(0.2);
+                        robot.leftHand.setPosition(0.2);
                     }
-
+                    */
                     // Shooter with toggle
                     // TODO: debug if power is reversed
                     if (gamepad1.dpad_up && gamepad1.dpad_up != prevValueShooter) {
@@ -236,29 +231,6 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     prevValueBothIntake = gamepad1.dpad_left;
 
                     */
-
-                    /*
-                    // Claw arm
-                    if (gamepad1.dpad_left) {
-                        isClawing = true;
-                    }
-
-                    if (isClawing) {
-                        clawCount += 1;
-                    }
-                    if (clawCount > 100) {
-                        isClawing = false;
-                        clawCount = 0;
-                    }
-                    if (isClawing) {
-                        robot.clawServo.setPosition(0.5);
-                        robot.clawMotorDegSet(1.0, 250 ,6);
-                        robot.clawServo.setPosition(1.0);
-                    } else {
-                        robot.clawMotorDegSet(1.0, 100, 6);
-                        robot.clawServo.setPosition(1.0);
-                    }
-
                     // Hooper servo
                     // User input for kicker servo
                     if (gamepad1.a) {
@@ -272,15 +244,13 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         isKicking = false;
                         servoCount = 0;
                     }
-
                     // Kicking
                     if (isKicking) {
                         robot.hopperServo.setPosition(0.5);
                     }
                     else {
-                        robot.hopperServo.setPosition((0.8));
+                        robot.hopperServo.setPosition((1.0));
                     }
-                    */
                     /*
                     // Both outake with toggle
                     if (gamepad1.dpad_right && gamepad1.dpad_right != prevValueBothOutake) {
