@@ -68,9 +68,6 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     boolean toggleSurgicalIntake = false;
     boolean prevValueWheelIntake = false;
     boolean toggleWheelIntake = false;
-    // TODO: temporary
-    boolean prevValueSoloIntake = false;
-    boolean toggleSoloIntake = false;
     // Not currently in use
     boolean prevValueSpeedControl = false;
     boolean toggleSpeedControl = false;
@@ -186,8 +183,7 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
 
                     // TODO: NOT IN USE; Mechanism Control
-                    // TODO: debug different motor/servo names according to base
-                    /*
+
                     // Wobble Arm
                     double armMotorPower = gamepad1.right_trigger - gamepad1.left_trigger;
                     if (armMotorPower > 0.4) {
@@ -195,17 +191,16 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     } else if (armMotorPower < -0.4) {
                         armMotorPower = -0.4;
                     }
-                    robot.wobbleArm.setPower(armMotorPower);
+                    robot.wobbleMotor.setPower(armMotorPower);
 
                     // Wobble Servo
                     if (gamepad1.right_bumper) {
-                        robot.leftHand.setPosition(1.0);
+                        robot.wobbleServo.setPosition(1.0);
                     } else if (gamepad1.left_bumper) {
-                        robot.leftHand.setPosition(0.2);
+                        robot.wobbleServo.setPosition(0.2);
                     }
-                    */
+
                     // Shooter with toggle
-                    // TODO: debug if power is reversed
                     if (gamepad1.dpad_up && gamepad1.dpad_up != prevValueShooter) {
                         if (!toggleShooter){
                             // If inaccurate -0.77 is golden power, second power is -0.7785
@@ -264,7 +259,18 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                         toggleBothOutake = !toggleBothOutake;
                     }
                     prevValueBothOutake = gamepad1.dpad_right;
+                    */
+                    // Claw
+                    if (gamepad1.dpad_left) {
+                        robot.clawMotorDegSet(1.0, 250, 7);
+                        delay(0.3);
+                        robot.clawServo.setPosition(1.0);
+                        delay(0.3);
+                        robot.clawMotorDegSet(1, 50, 7);
+                    }
 
+
+                    /*
                     // Surgical tubing intake with toggle
                     if (gamepad1.dpad_down && gamepad1.dpad_down != prevValueSurgicalIntake) {
                         if (!toggleSurgicalIntake){
@@ -293,4 +299,13 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
             }
         }
     }
+
+    public void delay(double t) { // Imitates the Arduino delay function
+        runtime.reset();
+        while ((runtime.seconds() < t)) {
+            telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+        }
+    }
+
 }
