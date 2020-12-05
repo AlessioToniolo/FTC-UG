@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot.opmodes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -40,6 +41,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
         AUTOMATIC_CONTROL
     }
 
+    // Dashboard for testing
+    FtcDashboard dashboard;
+
     Mode currentMode = Mode.DRIVER_CONTROL;
 
     // The location we want the bot to automatically go to when we press the B button
@@ -79,6 +83,17 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
     int servoCount = 0;
     boolean isKicking = false;
 
+    // Mechanism positions for dashboard
+    public static double wobbleRightBumperPos = 1.0;
+    public static double wobbleLeftBumperPos = 0.2;
+    public static double isKickingHopperPos = 0.5;
+    public static double isNotKickingHopperPos = 1.0;
+    public static double shooterPower = -0.8;
+    public static double clawOverHopperPos = 250;
+    public static double clawOverGroundPos = 50;
+    public static double clawServoReleasePos = 1.0;
+    public static double clawServoGrabPos = 0.5;
+
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize custom cancelable SampleMecanumDrive class
@@ -103,6 +118,9 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
         // Retrieve our pose from the PoseStorage.currentPose static field
         // See AutoTransferPose.java for further details
         drive.setPoseEstimate(PoseStorage.currentPose);
+
+        // Dashboard initialization
+        dashboard = FtcDashboard.getInstance();
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Message:", "Robot Ready");
@@ -195,16 +213,15 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
 
                     // Wobble Servo
                     if (gamepad1.right_bumper) {
-                        robot.wobbleServo.setPosition(1.0);
+                        robot.wobbleServo.setPosition(wobbleRightBumperPos);
                     } else if (gamepad1.left_bumper) {
-                        robot.wobbleServo.setPosition(0.2);
+                        robot.wobbleServo.setPosition(wobbleLeftBumperPos);
                     }
 
                     // Shooter with toggle
                     if (gamepad1.dpad_up && gamepad1.dpad_up != prevValueShooter) {
                         if (!toggleShooter){
-                            // If inaccurate -0.77 is golden power, second power is -0.7785
-                            robot.shooterMotor.setPower(-1);
+                            robot.shooterMotor.setPower(shooterPower);
                         } else {
                             robot.shooterMotor.setPower(0);
                         }
@@ -241,10 +258,10 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
                     // Kicking
                     if (isKicking) {
-                        robot.hopperServo.setPosition(0.5);
+                        robot.hopperServo.setPosition(isKickingHopperPos);
                     }
                     else {
-                        robot.hopperServo.setPosition((1.0));
+                        robot.hopperServo.setPosition((isNotKickingHopperPos));
                     }
                     /*
                     // Both outake with toggle
@@ -260,13 +277,15 @@ public class CompetitionPositionToggleCentric extends LinearOpMode {
                     }
                     prevValueBothOutake = gamepad1.dpad_right;
                     */
+
                     // Claw
                     if (gamepad1.dpad_left) {
-                        robot.clawMotorDegSet(1.0, 250, 7);
+                        robot.clawServo.setPosition(clawServoGrabPos);
+                        robot.clawMotorDegSet(1.0, clawOverHopperPos, 7);
                         delay(0.3);
-                        robot.clawServo.setPosition(1.0);
+                        robot.clawServo.setPosition(clawServoReleasePos);
                         delay(0.3);
-                        robot.clawMotorDegSet(1, 50, 7);
+                        robot.clawMotorDegSet(1, clawOverGroundPos, 7);
                     }
 
 
